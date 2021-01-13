@@ -17,7 +17,7 @@ class App extends Component {
     return (
       <div className="App"> 
       <Layout>
-      <Header>Seetha & Ryan's Feeds Project</Header>
+      <Header><h1>Seetha & Ryan's Feeds Project</h1></Header>
       <Layout>
       <Sider style={{background:'white'}}>
        <div id="sidebarContainer"> 
@@ -27,12 +27,13 @@ class App extends Component {
       <Layout>
         <Content><h1>Our Feeds</h1></Content>
         <div id="postContainer">
-        //Post Section//
+        <br></br>
         <div></div>
         <div id="textBox">
           Enter Post  Here
         </div>
         <div></div>
+        <br></br>
         <button onClick={this.postMsg}>
         Post
         </button>
@@ -40,6 +41,7 @@ class App extends Component {
         </div>
         <Footer>        
           <div id="container">
+            <br></br>
           Personal Timeline & Global Feed
         </div></Footer>
       </Layout>
