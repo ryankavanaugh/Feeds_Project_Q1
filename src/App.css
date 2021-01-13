@@ -36,3 +36,35 @@
     transform: rotate(360deg);
   }
 }
+
+#container {
+  display: inline-block;
+  border-style: solid;
+  border-width: medium;
+  width: 500px;
+  height: 700px;
+}
+
+#postContainer {
+  display: inline-block;
+  border-style: solid;
+  border-width: medium;
+  width: 500px;
+  height: 150px;
+}
+
+#sidebarContainer {
+  display: inline-block;
+  border-style: solid;
+  border-width: medium;
+  width: 100px;
+  height: 80px;
+}
+
+#textBox{
+  display: inline-block;
+  border-style: solid;
+  border-width: medium;
+  width: 300px;
+  height: 70px;
+}
