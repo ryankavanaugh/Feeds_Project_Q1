@@ -1,16 +1,46 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import './App.css';
 import Person from './Person/Person';
 import { Layout } from 'antd';
+import { StreamApp } from 'react-activity-feed';
+import 'react-activity-feed/dist/index.css';
+
+const key = 's7ezwzp6k776'
+const Secret = '3hmrsshtvsxzr7ryzmfqu4rz5hf9n8uruu3aq4kef2keza3tgydtj32dtzuau7nz'
 
 const { Header, Footer, Sider, Content } = Layout;
 
+let stream = require('getstream');
+let client = stream.connect(key);
+// let userToken = client.createUserToken('icy-disk-9');
+let userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoicnlhbiJ9.CXJfBSKnnOeX_5mDCBz_mKrjf5Hb0t4NWEmIIUaZRnc'
+
+
 class App extends Component {
+  
+// state = {
+// inputValue:''
+// };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputValue: '',
+      postcount: ''
+    };
+  }
+
+  updateInputValue(newInputValue) {
+    this.setState({inputValue: newInputValue});
+    // console.log(newInputValue);
+    console.log(this.state.inputValue);
+  }
 
   postMsg() {
-    console.log('posting message');
+    console.log(this.state.inputValue);
     // this.setState(state => ({
     // }));
+    //hit Stream API 
   }
 
   render() {
@@ -29,12 +59,14 @@ class App extends Component {
         <div id="postContainer">
         <br></br>
         <div></div>
-        <div id="textBox">
-          Enter Post  Here
-        </div>
+
+        {/* Here: this onChange function is listening for specific events, e means events */}
+        <textarea onChange={e => this.updateInputValue(e.target.value)}></textarea>
+
         <div></div>
         <br></br>
-        <button onClick={this.postMsg}>
+
+        <button onClick={() => this.postMsg()}>
         Post
         </button>
         
