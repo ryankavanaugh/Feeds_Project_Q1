@@ -2,7 +2,6 @@ import React, { Component, useState } from 'react';
 import './App.css';
 import Person from './Person/Person';
 import { Layout } from 'antd';
-// import { StreamApp } from 'react-activity-feed';
 import 'react-activity-feed/dist/index.css';
 import { StreamApp, NotificationDropdown, FlatFeed } from 'react-activity-feed';
 import { connect } from 'getstream';
@@ -18,7 +17,7 @@ let client = stream.connect(key);
 let userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoicnlhbiJ9.Va9Thg7gl4GtW3z1Q18FsHxYL7P0rAbXJtzpQTAr4KQ'
 
 const newFeed = client.feed('user', 'ryan', userToken);
-console.log(newFeed);
+// console.log(newFeed);
 // const activity = newFeed.addActivity({
 //   actor: 'ryan', 
 //   tweet: 'Hello world', 
@@ -40,7 +39,14 @@ class App extends Component {
       inputValue: '',
       postText: '',
       postcount: '',
+      items: [],
+      token: ''
     };
+  }
+
+  // life cycle hook, runs first or second
+  componentDidMount() {
+    this.getToken()
   }
 
   updateInputValue(newInputValue) {
@@ -50,7 +56,21 @@ class App extends Component {
   }
 
 
-  startFeed() {
+  getToken(){
+    // fetch("http://localhost:1800/feedstoken?req=ryan", {method: 'POST'})
+    // // this happens once we get the response data
+    // .then((res) => {
+    //   console.log((res))
+    // })
+    // .catch(err => console.log(err))
+
+    fetch("http://localhost:1800/feedstoken?req=ryan", {method: 'POST'})
+    .then(res => res.json())
+    .then(data => this.setState({token: data.payload}))
+    // .then(data => console.log(data));
+  }
+
+  addFeedActivites() {
     // Variables
     const key = 'qaq9tzbfa59s'
     const Secret = '87hpnuzt45t9bac2t73u2thk2h8dzdt9w6tcyp7bzth9h5t7qnm6damrg97tfnnj'
@@ -75,20 +95,16 @@ class App extends Component {
 
 
   postMsg() {
-    // console.log(this.state.inputValue);
+    this.getToken();
+    console.log(this.state.inputValue);
+    // fetch('http://example.com/movies.json')
+    // .then(response => response.json())
+    // .then(data => console.log(data));
     // this.setState(state => ({
     // }));
-        console.log('hi');
-    let result = this.startFeed();
-    console.log(result);
-
-    //hit Stream API 
-    // feed.addActivity({
-    //   actor: 'ryan', 
-    //   tweet: 'Hello world', 
-    //   verb: 'tweet', 
-    //   object: 1
-    // })
+        // console.log('hi!');
+    // let result = this.addFeedActivites();
+    // console.log(result);
     }
 
   render() {
@@ -124,10 +140,10 @@ class App extends Component {
           Personal Timeline & Global Feed
           
           {/* APP */}
-        
             <StreamApp
               apiKey="qaq9tzbfa59s"
               appId="100501"
+              // token = 
               token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoicnlhbiJ9.Va9Thg7gl4GtW3z1Q18FsHxYL7P0rAbXJtzpQTAr4KQ' 
               // token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoidXNlci1vbmUifQ.3bHobv2wuUyrUtohiSmyZ744RUzGnoWkMEPI3zFaq78"
             >
