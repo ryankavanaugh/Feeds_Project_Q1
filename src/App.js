@@ -6,12 +6,11 @@ import 'react-activity-feed/dist/index.css';
 import { StreamApp, StatusUpdateForm, NotificationDropdown, LikeButton,
   FlatFeed, Activity, CommentItem, CommentField, CommentList } from 'react-activity-feed';
 import { connect } from 'getstream';
+import firstFeed from './Feed/First Feed';
 const stream = require('getstream');
 const { Header, Footer, Sider, Content } = Layout;
 
 // To do
-// login that takes you to your feed
-// toggle buttons that change feed
 // aggregated notification feed that takes you to the post
 // photos, comments, + reactions, will CDN be an issue with photos?
 
@@ -20,12 +19,10 @@ const CustomActivity = (props) => {
     <Activity
       {...props}
       Footer={
-      
-        <div>
+        <div style={{ padding: '8px 16px' }}>
         <LikeButton {...props} />
         <CommentField
                       activity={props.activity}
-                      // onAddReaction={props.onAddReaction} 
                       />
                       <CommentList
                       activityId={props.activity.id}
@@ -38,19 +35,11 @@ const CustomActivity = (props) => {
                         />
                         </div>)} />
         </div>
-
-        // <div>
-        // <LikeButton {...props} />
-        // <CommentField
-        // activity={props.activity}
-        // onAddReaction={props.onAddReaction} />
-        // </div>
-
-        
       }
     />
   );
 };
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -59,10 +48,21 @@ class App extends Component {
       postText: '',
       postcount: '',
       items: [],
-      token: '',
-      userID: 'ryan'
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFjayJ9.vG9zkuZvcQpRftbYFpNdxBKNxvCNV-gG3SJtJmP_bUg',
+      userID: 'ryan',
+      key: 'qaq9tzbfa59s',
+      appID: '100501',
+      isUserFeed: false,
+
     };
   }
+
+  switchFeeds = () => {
+    this.setState({
+      isUserFeed: !this.state.isUserFeed
+    })
+  }
+
   getToken(userName){
    fetch("http://localhost:3002/token",
     {
@@ -99,18 +99,12 @@ class App extends Component {
   }
 
   postMsg = async () => {
-    // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFjayJ9.vG9zkuZvcQpRftbYFpNdxBKNxvCNV-gG3SJtJmP_bUg';
-    // // const userID='seetha';
-    // // const userID = this.state.userID
-
     const key = 'qaq9tzbfa59s'
     const appID = '100501'
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFjayJ9.vG9zkuZvcQpRftbYFpNdxBKNxvCNV-gG3SJtJmP_bUg';
     const userID = 'jack';
     const client = stream.connect( key, token, appID);
-    // const feed = client.feed('timeline', this.state.userID, token);
     const feed = client.feed('timeline', userID, token);
-    // await feed.follow('ryan');
     
     const activityfeed = {
       'actor': "SU:"+userID,
@@ -142,28 +136,28 @@ class App extends Component {
       const addactivity = await feed.addActivity(activityfeed);
       }
 
+
+
   render() {
-    return (
+
+    if (this.state.isUserFeed===true){
+      return (
       <div className="App">
       <Layout>
-      <Header><h1>Seetha & Ryan's Feeds Project</h1></Header>
+      <Header></Header>
       <Layout>
-      <Sider style={{background:'white'}}>
-       <div id="sidebarContainer">
-       Global Feed
-       Personal Timeline
-       Notification 
+      <Sider>
+       <div id="sidebarContainer" onClick={this.switchFeeds}>
+       Switch Feed
        </div>
         </Sider>
-
         <Content>
-        <div id="postContainer">
-        <br></br>
-        <b>Global Feed/Jack</b>
-        <br></br>
-        <br></br>
+
+{/* 1st feed */}
+        <div id="postContainer"><br></br>
+        <b>User Feed</b>
+        <br></br><br></br>
         <div></div>
-        
         <textarea onChange={e => this.updateInputValue(e.target.value)}></textarea>
         <div></div>
         <br></br>
@@ -171,26 +165,40 @@ class App extends Component {
         Post
         </button>
             <br></br>
-          
         <StreamApp
-            // const key = 'qaq9tzbfa59s'
-            // const appID = '100501'
-            // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFjayJ9.vG9zkuZvcQpRftbYFpNdxBKNxvCNV-gG3SJtJmP_bUg';
-            //  apiKey="3ektw92qb4ew"
-            //  appId="93749"
-            //  token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoic2VldGhhIn0.ZDepaoDtrvJXaWAQhVxPOUzsIy7LG5T_qrEPZt9PPzE"
-            apiKey="qaq9tzbfa59s"
-            appId="100501"
-           token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamFjayJ9.vG9zkuZvcQpRftbYFpNdxBKNxvCNV-gG3SJtJmP_bUg"
+          apiKey={this.state.key}
+          appId={this.state.appID}
+          token={this.state.token}
         >
           <FlatFeed Activity={CustomActivity} notify />
           <StatusUpdateForm feedGroup="timeline" />
         </StreamApp>
         </div>
+        </Content>
+        </Layout>
+        <Footer> 
+          </Footer>
+      </Layout>
+      </div>
+    );
 
+    } else {
+      return (
+      <div className="App">
+      <Layout>
+      <Header></Header>
+      <Layout>
+      <Sider>
+       <div id="sidebarContainer" onClick={this.switchFeeds}>
+       Switch Feed
+       </div>
+        </Sider>
+        <Content>
+
+{/* second feed */}
         <div id="postContainer">
           <br></br>
-        <b>Personal Timeline/Ryan</b> 
+        <b>Timeline</b> 
         <br></br>
         <br></br>
         <div></div>
@@ -213,15 +221,15 @@ class App extends Component {
           <StatusUpdateForm feedGroup="timeline" />
         </StreamApp>
         </div>
-
         </Content>
         </Layout>
-        <Footer> Footer
+        <Footer> 
           </Footer>
       </Layout>
-
       </div>
-    );
+      );
+    }
+
   }
 }
 export default App;
